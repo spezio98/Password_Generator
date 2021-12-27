@@ -13,12 +13,13 @@
         android:layout_marginStart="4dp"
         android:layout_marginTop="90dp"
         android:ems="10"
-        android:hint="Password"
+        android:hint="@string/password"
         android:inputType="textPersonName"
         android:textAlignment="center"
         app:layout_constraintEnd_toStartOf="@+id/imgBtnRefresh"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:autofillHints="Password" />
 
     <ImageButton
         android:id="@+id/imgBtnRefresh"
@@ -34,7 +35,7 @@
         app:srcCompat="@drawable/ic_baseline_refresh_24"
         tools:ignore="SpeakableTextPresentCheck" />
 
-    <Switch
+    <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/switchNumbers"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -45,7 +46,7 @@
         app:layout_constraintStart_toStartOf="@+id/seekBar"
         app:layout_constraintTop_toBottomOf="@+id/seekBar" />
 
-    <Switch
+    <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/switchSymbols"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -63,7 +64,9 @@
         android:layout_marginTop="32dp"
         app:layout_constraintEnd_toEndOf="@+id/edtPassword"
         app:layout_constraintStart_toStartOf="@+id/edtPassword"
-        app:layout_constraintTop_toBottomOf="@+id/progressBar2" />
+        app:layout_constraintTop_toBottomOf="@+id/progressBar"
+        android:min="8"
+        android:max="50"/>
 
     <TextView
         android:id="@+id/txtLength"
@@ -78,7 +81,7 @@
         app:layout_constraintTop_toBottomOf="@+id/imgBtnRefresh" />
 
     <ProgressBar
-        android:id="@+id/progressBar2"
+        android:id="@+id/progressBar"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
