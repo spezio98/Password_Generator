@@ -8,6 +8,8 @@ import android.content.ClipboardManager;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -20,7 +22,23 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.StringReader;
+import java.math.BigInteger;
+import java.net.URI;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Locale;
 import java.util.Random;
+import java.util.stream.Stream;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -43,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ClipboardManager myClipboard;
     private ClipData myClip;
+    private Integer ntimes; //number of times pwned
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,7 +151,74 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        btnPwnd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
+                //Get password digest
+                String digest = SHA1(currentPassword);
+                System.out.println(digest);
+
+                // Instantiate the RequestQueue.
+                RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
+                String url ="https://api.pwnedpasswords.com/range/" + digest.substring(0,5); //It requires first 5 chars
+                System.out.println(url);
+
+                // Request a string response from the provided URL.
+                StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                        new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                // Display the first 500 characters of the response string.
+
+                                if(response.contains(digest.substring(5))) //remaining chars after the 5th.
+                                {
+                                    String[] lines = response.split("\n");
+
+                                    for(String l: lines) {
+                                        String[] values = l.replace("\r","").split(":");
+                                        if(values[0].equals(digest.substring(5)))
+                                        {
+                                            ntimes = Integer.parseInt(values[1]);
+                                            break;
+                                        }
+                                    }
+
+                                }
+                                else
+                                    System.out.println("Non trovato");
+
+                            }
+                        }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        System.out.println("Error");
+                    }
+                });
+
+                // Add the request to the RequestQueue.
+                queue.add(stringRequest);
+            }
+        });
+
+        txtPassword.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                currentPassword = charSequence.toString();
+                //System.out.println(currentPassword);
+                changePrgBarValue();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
         //System.out.println(seekBar);
         //txtLength.setText(seekBar.getProgress());
     }
@@ -152,6 +238,7 @@ public class MainActivity extends AppCompatActivity {
         changePrgBarValue();
         btnCopy = findViewById(R.id.btnCopy);
         btnPwnd = findViewById(R.id.btnPwnd);
+        ntimes = 0;
     }
 
     private String getRandomPassword(final int sizeOfPasswordString){
@@ -223,5 +310,37 @@ public class MainActivity extends AppCompatActivity {
                 else
                     prgBar.setProgressTintList(ColorStateList.valueOf(Color.GREEN));
         prgBar.setProgress(value);
+    }
+
+    private String SHA1(String input)
+    {
+        try {
+            // getInstance() method is called with algorithm SHA-1
+            MessageDigest md = MessageDigest.getInstance("SHA-1");
+
+            // digest() method is called
+            // to calculate message digest of the input string
+            // returned as array of byte
+            byte[] messageDigest = md.digest(input.getBytes());
+
+            // Convert byte array into signum representation
+            BigInteger no = new BigInteger(1, messageDigest);
+
+            // Convert message digest into hex value
+            String hashtext = no.toString(16);
+
+            // Add preceding 0s to make it 32 bit
+            while (hashtext.length() < 32) {
+                hashtext = "0" + hashtext;
+            }
+
+            // return the HashText
+            return hashtext.toUpperCase(Locale.ROOT);
+        }
+
+        // For specifying wrong message digest algorithms
+        catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
