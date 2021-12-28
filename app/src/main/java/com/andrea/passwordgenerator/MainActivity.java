@@ -25,9 +25,15 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkError;
+import com.android.volley.NoConnectionError;
+import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -85,7 +91,6 @@ public class MainActivity extends AppCompatActivity {
                     txtPassword.setText(currentPassword);
                     changePrgBarValue();
                 }
-                //System.out.println(currentPassword);
             }
 
             @Override
@@ -105,7 +110,6 @@ public class MainActivity extends AppCompatActivity {
                 currentPassword = getRandomPassword(passwordLength);
                 txtPassword.setText(currentPassword);
                 changePrgBarValue();
-                //System.out.println(calculatePasswordStrength(currentPassword));
             }
         });
 
@@ -168,7 +172,6 @@ public class MainActivity extends AppCompatActivity {
                 // Instantiate the RequestQueue.
                 RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
                 String url ="https://api.pwnedpasswords.com/range/" + digest.substring(0,5); //It requires first 5 chars
-                System.out.println(url);
 
                 // Request a string response from the provided URL.
                 StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
@@ -195,7 +198,6 @@ public class MainActivity extends AppCompatActivity {
                                     ntimes=0;
 
                                 //show alert
-                                System.out.println(ntimes);
                                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                                 if(ntimes>0) {
                                     builder.setMessage("Your password has been pwned " + ntimes + " times!");
@@ -203,13 +205,38 @@ public class MainActivity extends AppCompatActivity {
                                 else{
                                     builder.setMessage("Perfect!\nYour password has not been pwned!");
                                 }
-                                builder.setPositiveButton("OK", null);
+                                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        ntimes=0;
+                                    }
+                                });
                                 builder.show();
+                                ntimes=0;
                             }
                         }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        System.out.println("Error");
+                        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                        if (error instanceof NetworkError) {
+                            builder.setMessage("Error:\nNo internet connection :(");
+                        } else if (error instanceof ServerError) {
+                            builder.setMessage("Error:\nServer error :(");
+                        } else if (error instanceof ParseError) {
+                            builder.setMessage("Error:\nParsing error :(");
+                        } else if (error instanceof NoConnectionError) {
+                            builder.setMessage("Error:\nNo internet connection :(");
+                        } else if (error instanceof TimeoutError) {
+                            builder.setMessage("Error:\nTimeout :(");
+                        }
+
+                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                ntimes=0;
+                            }
+                        });
+                        builder.show();
                     }
                 });
 
