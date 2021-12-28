@@ -2,6 +2,7 @@ package com.andrea.passwordgenerator;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.SwitchCompat;
 
 import android.content.ClipData;
@@ -70,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         init();
 
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -233,6 +234,8 @@ public class MainActivity extends AppCompatActivity {
                 txtLength.setText(String.valueOf(passwordLength));
                 if(passwordLength>=8)
                     seekBar.setProgress(passwordLength);
+                else
+                    seekBar.setProgress(0);
 
             }
 

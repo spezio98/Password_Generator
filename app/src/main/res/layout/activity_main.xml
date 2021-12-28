@@ -1,119 +1,121 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <EditText
-        android:id="@+id/edtPassword"
-        android:layout_width="300dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="90dp"
-        android:ems="10"
-        android:hint="@string/password"
-        android:inputType="textPersonName"
-        android:textAlignment="center"
-        app:layout_constraintEnd_toStartOf="@+id/imgBtnRefresh"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:autofillHints="Password" />
-
-    <ImageButton
-        android:id="@+id/imgBtnRefresh"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="90dp"
-        android:backgroundTint="#03A9F4"
-        android:minHeight="48dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.955"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_baseline_refresh_24"
-        tools:ignore="SpeakableTextPresentCheck" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="120dp">
 
-    <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/switchNumbers"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:minHeight="48dp"
-        android:text="Numbers"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="@+id/txtLength"
-        app:layout_constraintStart_toStartOf="@+id/seekBar"
-        app:layout_constraintTop_toBottomOf="@+id/seekBar" />
+        <EditText
+            android:id="@+id/edtPassword"
+            android:layout_width="300dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="24dp"
+            android:autofillHints="Password"
+            android:ems="10"
+            android:hint="@string/password"
+            android:inputType="textPersonName"
+            android:textAlignment="center"
+            app:layout_constraintEnd_toStartOf="@+id/imgBtnRefresh"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/switchSymbols"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:minHeight="48dp"
-        android:text="Symbols"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="@+id/switchNumbers"
-        app:layout_constraintStart_toStartOf="@+id/switchNumbers"
-        app:layout_constraintTop_toBottomOf="@+id/switchNumbers" />
+        <ImageButton
+            android:id="@+id/imgBtnRefresh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#03A9F4"
+            android:minHeight="48dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_baseline_refresh_24"
+            tools:ignore="SpeakableTextPresentCheck" />
 
-    <SeekBar
-        android:id="@+id/seekBar"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        app:layout_constraintEnd_toEndOf="@+id/edtPassword"
-        app:layout_constraintStart_toStartOf="@+id/edtPassword"
-        app:layout_constraintTop_toBottomOf="@+id/progressBar"
-        android:min="8"
-        android:max="50"/>
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/switchNumbers"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:minHeight="48dp"
+            android:text="Numbers"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="@+id/txtLength"
+            app:layout_constraintStart_toStartOf="@+id/seekBar"
+            app:layout_constraintTop_toBottomOf="@+id/seekBar" />
 
-    <TextView
-        android:id="@+id/txtLength"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="80dp"
-        android:text="0"
-        android:textAlignment="center"
-        app:layout_constraintEnd_toEndOf="@+id/imgBtnRefresh"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/imgBtnRefresh"
-        app:layout_constraintTop_toBottomOf="@+id/imgBtnRefresh" />
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/switchSymbols"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:minHeight="48dp"
+            android:text="Symbols"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="@+id/switchNumbers"
+            app:layout_constraintStart_toStartOf="@+id/switchNumbers"
+            app:layout_constraintTop_toBottomOf="@+id/switchNumbers" />
 
-    <ProgressBar
-        android:id="@+id/progressBar"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        app:layout_constraintEnd_toEndOf="@+id/imgBtnRefresh"
-        app:layout_constraintStart_toStartOf="@+id/edtPassword"
-        app:layout_constraintTop_toBottomOf="@+id/edtPassword"
-        android:min="0"
-        android:max="10"/>
+        <SeekBar
+            android:id="@+id/seekBar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:max="50"
+            android:min="8"
+            app:layout_constraintEnd_toEndOf="@+id/edtPassword"
+            app:layout_constraintStart_toStartOf="@+id/edtPassword"
+            app:layout_constraintTop_toBottomOf="@+id/progressBar" />
 
-    <Button
-        android:id="@+id/btnCopy"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="90dp"
-        android:text="Copy"
-        app:layout_constraintEnd_toStartOf="@+id/btnPwnd"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/switchSymbols"
-        app:layout_constraintTop_toBottomOf="@+id/switchSymbols" />
+        <TextView
+            android:id="@+id/txtLength"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="80dp"
+            android:text="0"
+            android:textAlignment="center"
+            app:layout_constraintEnd_toEndOf="@+id/imgBtnRefresh"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/imgBtnRefresh"
+            app:layout_constraintTop_toBottomOf="@+id/imgBtnRefresh" />
 
-    <Button
-        android:id="@+id/btnPwnd"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="90dp"
-        android:layout_marginEnd="24dp"
-        android:text="Pwnd?"
-        app:layout_constraintEnd_toEndOf="@+id/switchSymbols"
-        app:layout_constraintTop_toBottomOf="@+id/switchSymbols" />
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:max="10"
+            android:min="0"
+            app:layout_constraintEnd_toEndOf="@+id/imgBtnRefresh"
+            app:layout_constraintStart_toStartOf="@+id/edtPassword"
+            app:layout_constraintTop_toBottomOf="@+id/edtPassword" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <Button
+            android:id="@+id/btnCopy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="88dp"
+            android:text="Copy"
+            app:layout_constraintEnd_toStartOf="@+id/btnPwnd"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/switchSymbols"
+            app:layout_constraintTop_toBottomOf="@+id/switchSymbols" />
+
+        <Button
+            android:id="@+id/btnPwnd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="88dp"
+            android:layout_marginEnd="24dp"
+            android:text="Pwned?"
+            app:layout_constraintEnd_toEndOf="@+id/switchSymbols"
+            app:layout_constraintTop_toBottomOf="@+id/switchSymbols" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>
