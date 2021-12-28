@@ -1,10 +1,12 @@
 package com.andrea.passwordgenerator;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.DialogInterface;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -62,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
     private ClipboardManager myClipboard;
     private ClipData myClip;
     private Integer ntimes; //number of times pwned
+    private boolean manual = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,11 +77,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
                 //System.out.println(progress);
-                passwordLength = progress;
-                txtLength.setText(String.valueOf(passwordLength));
-                currentPassword = getRandomPassword(passwordLength);
-                txtPassword.setText(currentPassword);
-                changePrgBarValue();
+                if(!manual) {
+                    passwordLength = progress;
+                    txtLength.setText(String.valueOf(passwordLength));
+                    currentPassword = getRandomPassword(passwordLength);
+                    txtPassword.setText(currentPassword);
+                    changePrgBarValue();
+                }
                 //System.out.println(currentPassword);
             }
 
@@ -186,8 +191,19 @@ public class MainActivity extends AppCompatActivity {
 
                                 }
                                 else
-                                    System.out.println("Non trovato");
+                                    ntimes=0;
 
+                                //show alert
+                                System.out.println(ntimes);
+                                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                                if(ntimes>0) {
+                                    builder.setMessage("Your password has been pwned " + ntimes + " times!");
+                                }
+                                else{
+                                    builder.setMessage("Perfect!\nYour password has not been pwned!");
+                                }
+                                builder.setPositiveButton("OK", null);
+                                builder.show();
                             }
                         }, new Response.ErrorListener() {
                     @Override
@@ -198,25 +214,31 @@ public class MainActivity extends AppCompatActivity {
 
                 // Add the request to the RequestQueue.
                 queue.add(stringRequest);
+
+
             }
         });
 
         txtPassword.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
+                manual = true;
             }
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 currentPassword = charSequence.toString();
-                //System.out.println(currentPassword);
                 changePrgBarValue();
+                passwordLength = currentPassword.length();
+                txtLength.setText(String.valueOf(passwordLength));
+                if(passwordLength>=8)
+                    seekBar.setProgress(passwordLength);
+
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
-
+                manual = false;
             }
         });
         //System.out.println(seekBar);
