@@ -70,26 +70,28 @@ public class MainActivity extends AppCompatActivity {
 
     private ClipboardManager myClipboard;
     private ClipData myClip;
+
     private Integer ntimes; //number of times pwned
-    private boolean manual = false;
+    private boolean manual = false;     //useful for writing own password on the editText object for checking its strength.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+
         init();
 
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
-                //System.out.println(progress);
+
                 if(!manual) {
                     passwordLength = progress;
                     txtLength.setText(String.valueOf(passwordLength));
-                    currentPassword = getRandomPassword(passwordLength);
+                    currentPassword = getRandomPassword(passwordLength); //if seekbar value changes, a new password will be generated
                     txtPassword.setText(currentPassword);
-                    changePrgBarValue();
+                    changePrgBarValue();                                //define new value of progressbar for password strength
                 }
             }
 
@@ -116,6 +118,7 @@ public class MainActivity extends AppCompatActivity {
         switchNumbers.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                //it simply adds new sets of characters
                 if(switchSymbols.isChecked())
                     allowedCharacters = upperCaseChars.concat(lowerCaseChars).concat(specialChars);
                 else
@@ -123,7 +126,6 @@ public class MainActivity extends AppCompatActivity {
 
                 if(b)
                     allowedCharacters = allowedCharacters.concat(numberChars);
-
 
                 currentPassword = getRandomPassword(passwordLength);
                 txtPassword.setText(currentPassword);
@@ -154,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
                 myClipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
                 String text = txtPassword.getText().toString();
 
-                myClip = ClipData.newPlainText("Password", text);
+                myClip = ClipData.newPlainText("Password", text); //a bit insecure. The password might be read from another process
                 myClipboard.setPrimaryClip(myClip);
 
                 Toast.makeText(getApplicationContext(), "Password Copied",Toast.LENGTH_SHORT).show();
@@ -164,6 +166,10 @@ public class MainActivity extends AppCompatActivity {
         btnPwnd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                //the pwnedpassword.com api require the first 5 chars of the SHA1(password) into the url of the GET request. It will search for similar digests and returns
+                //the list of them but only with the remaining chars (so, without the first 5 chars). Then we have to search for our digest line by line and we get the
+                //number of times that our password had been pwned.
 
                 //Get password digest
                 String digest = SHA1(currentPassword);
@@ -242,8 +248,6 @@ public class MainActivity extends AppCompatActivity {
 
                 // Add the request to the RequestQueue.
                 queue.add(stringRequest);
-
-
             }
         });
 
@@ -271,8 +275,6 @@ public class MainActivity extends AppCompatActivity {
                 manual = false;
             }
         });
-        //System.out.println(seekBar);
-        //txtLength.setText(seekBar.getProgress());
     }
 
     private void init(){
